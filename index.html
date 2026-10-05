@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="description" content="A calm, private Schulte Table focus trainer. 舒尔特表专注力训练。">
+  <title>FocusGrid — Schulte Table Trainer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="FocusGrid home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>focus<span class="brand-accent">grid</span></span></a>
+      <div class="header-actions">
+        <span class="top-note"><span class="status-dot"></span><span id="top-note">本地专注训练 · Private practice</span></span>
+        <button id="language-toggle" class="small-button" type="button" aria-label="Switch language">English</button>
+        <details class="settings-menu" id="settings-menu">
+          <summary id="settings-summary">设置 · Settings</summary>
+          <div class="settings-panel">
+            <label><span id="sound-label">声音 Sound</span><input id="sound-setting" type="checkbox" checked><span class="switch"></span></label>
+            <label><span id="haptic-label">触觉 Haptic</span><input id="haptic-setting" type="checkbox" checked><span class="switch"></span></label>
+            <label><span id="focus-label">焦点模式 Focus</span><input id="focus-setting" type="checkbox"><span class="switch"></span></label>
+            <label class="theme-row" for="theme-setting"><span id="theme-label">主题 Theme</span><select id="theme-setting"><option value="system">跟随系统 · System</option><option value="light">浅色 · Light</option><option value="dark">深色 · Dark</option></select></label>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <section class="intro" id="intro">
+      <div class="eyebrow">SCHULTE TABLE · 舒尔特表</div>
+      <h1 id="page-title">让注意力，回到此刻<span class="title-dot">.</span></h1>
+      <p id="page-description">每天几分钟，练习视觉搜索与稳定专注。准确优先，慢慢找到自己的节奏。</p>
+    </section>
+
+    <section class="training-layout" id="dashboard">
+      <div class="game-card" id="game-card">
+        <div class="game-topline">
+          <div>
+            <div class="section-label" id="today-label">今日训练 <span>· TODAY'S PRACTICE</span></div>
+            <p class="training-subtitle" id="training-subtitle">选择网格，开始专注训练</p>
+          </div>
+        </div>
+
+        <div class="custom-controls">
+          <label><span id="grid-size-label">网格 Grid</span><select id="grid-size"><option value="3">3 × 3</option><option value="4">4 × 4</option><option value="5" selected>5 × 5</option><option value="6">6 × 6</option><option value="7">7 × 7</option></select></label>
+          <label><span id="mode-label">模式 Mode</span><select id="training-mode"><option value="classic">经典 Classic</option><option value="reverse">逆序 Reverse</option></select></label>
+          <span id="challenge-tag" class="challenge-tag">5 × 5 · Classic</span>
+        </div>
+
+        <div class="game-stats">
+          <div class="metric timer-metric"><span class="metric-label" id="time-label">用时 TIME</span><strong id="timer" aria-live="off">00:00.00</strong></div>
+          <div class="metric next-metric"><span class="metric-label" id="next-label">进度 PROGRESS</span><strong id="next-number">0 / 25</strong><small id="mode-hint">按顺序找到所有数字</small></div>
+          <div class="metric error-metric"><span class="metric-label" id="errors-label">错误 ERRORS</span><strong id="error-count">0</strong></div>
+        </div>
+
+        <div class="progress-track" id="progress-track" role="progressbar" aria-label="Training progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+        <p class="table-instruction" id="table-instruction">点击「开始训练」，按顺序找到所有目标。</p>
+        <div class="grid-wrap">
+          <div id="number-grid" class="number-grid" role="group" aria-label="Schulte number grid"></div>
+          <section id="completion-overlay" class="completion-overlay" aria-live="polite" hidden>
+            <div class="complete-icon" aria-hidden="true">✓</div><p class="complete-kicker" id="complete-kicker">TRAINING COMPLETE</p>
+            <h2 id="complete-heading">完成得很好！</h2>
+            <strong class="result-time" id="final-time">00:00.00</strong>
+            <div id="new-record" class="new-record" hidden>🏆 NEW PERSONAL BEST</div>
+            <div class="result-grid">
+              <div><span id="accuracy-label">准确率</span><strong id="result-accuracy">100%</strong></div>
+              <div><span id="result-errors-label">错误</span><strong id="result-errors">0</strong></div>
+              <div><span id="previous-label">上次</span><strong id="previous-time">—</strong></div>
+              <div><span id="improvement-label">变化</span><strong id="improvement">—</strong></div>
+              <div class="result-wide"><span id="personal-best-label">个人最佳</span><strong id="personal-best">—</strong></div>
+            </div>
+            <div class="sparkline-block" id="sparkline-block" hidden>
+              <div class="sparkline-head"><span id="sparkline-label">最近 5 次 · THIS GRID</span><span id="sparkline-trend"></span></div>
+              <svg id="result-sparkline" viewBox="0 0 260 46" role="img" aria-label="Recent attempts"></svg>
+            </div>
+            <div class="result-actions"><button id="try-again" class="primary-button" type="button">再练一轮 · Try again</button><button id="back-dashboard" class="secondary-button" type="button">返回面板 · Dashboard</button></div>
+          </section>
+        </div>
+        <div class="controls-row">
+          <button id="start-button" class="primary-button" type="button"><span class="play-icon" aria-hidden="true">▶</span><span id="start-label">开始训练</span></button>
+          <button id="restart-button" class="secondary-button" type="button" aria-label="重新开始 Restart">↻ <span id="restart-label">重新开始</span></button>
+          <button id="focus-button" class="secondary-button focus-button" type="button" aria-pressed="false">◎ <span id="focus-button-label">焦点模式</span></button>
+          <span class="accuracy-note" id="accuracy-note"><span class="accuracy-icon">◎</span> 准确优先，保持放松</span>
+        </div>
+      </div>
+
+      <aside class="side-column" id="side-column">
+        <section class="side-card history-card">
+          <div class="side-heading"><div><span class="section-label" id="stats-title">训练数据</span><span class="side-subtitle" id="stats-scope">5 × 5 · CLASSIC</span></div><span class="history-icon" aria-hidden="true">↗</span></div>
+          <div class="history-stats">
+            <div><span id="today-best-label">今日最佳</span><strong id="today-best">—</strong></div>
+            <div><span id="today-average-label">今日平均</span><strong id="today-average">—</strong></div>
+            <div><span id="personal-stat-label">个人最佳</span><strong id="personal-stat">—</strong></div>
+            <div><span id="average-errors-label">平均错误</span><strong id="average-errors">—</strong></div>
+            <div><span id="total-sessions-label">总训练</span><strong id="total-sessions">0</strong></div>
+          </div>
+          <div class="history-divider"></div>
+          <div class="history-caption"><span id="recent-title">最近 7 次 · RECENT</span><span id="session-count">0 次</span></div>
+          <div class="chart-wrap" id="chart-wrap"><svg id="progress-chart" viewBox="0 0 320 138" role="img" aria-label="Recent training times"></svg><p id="chart-empty" class="chart-empty">完成几次训练后，这里会显示你的进步。</p></div>
+          <ol id="history-list" class="history-list"><li class="empty-history">完成训练后，记录会显示在这里。</li></ol>
+          <button id="clear-history" class="clear-button" type="button">清除记录 Clear history</button>
+        </section>
+      </aside>
+    </section>
+
+    <footer><span>FOCUSGRID · LOCAL FIRST</span><span id="footer-note">训练数据仅保存在此浏览器。一次只找一个数字。</span></footer>
+  </main>
+</body>
+</html>
